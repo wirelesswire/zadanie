@@ -12,6 +12,9 @@
 {% endblock %}
  
 {% block body %}
+<input type="text" placeholder="wpisz cześć wpisu " id ="szukaj" >
+<button onclick="filtruj()"> szukaj</button > 
+
 
 <div id ="tabelka">
 
@@ -28,6 +31,12 @@
     <button onclick="refreshtable()"> ref</button>
 
 <script>
+function filtruj(){
+    let val = $("#szukaj").val();
+    console.log(val);
+    refreshtable(val);
+}
+
 window.onload = refreshtable();
 nameI= $("#nameInput");
 emailI=$("#emailInput");
@@ -47,11 +56,11 @@ return {
     "status":status,
 }
 }
-function refreshtable(){
+function refreshtable(str){
 $.ajax({
                 type: "POST",
                 url: "/zad3/render", 
-                //data: "obj=" + getdata(),
+                data: "str=" + str,
                 success: (res) => {
                     //console.log(res);
                     $("#tabelka").html(res);
@@ -103,8 +112,7 @@ function deleteItem(id){
                 success: (res) => {
                     refreshtable();
                 }
-    })
-      
+    })     
 
     console.log(getdata());
     console.log(id);
@@ -114,21 +122,15 @@ let currentUpdating = -1;
 
 function updateSee(id){
     currentUpdating = id;
+    
     $("#btnUpdateDo").prop("disabled",false);
-
     $.ajax({
                 type: "POST",
                 url: "/zad3/form",
-                //data: "idup=" + currentUpdating,
                 success: (res) => {
                 $("#form").html(res);
                 }
-    })
-      
-
-
-
-
+    })   
 }
 function updateDo(){
     if(currentUpdating == -1 ){
@@ -136,15 +138,14 @@ function updateDo(){
     $.ajax({
                 type: "PUT",
                 url: "/zad3/update",
-                //data: "idup=" + currentUpdating+"objup"+getdata,
+                url: "https://gorest.co.in/public/v2/users/"+currentUpdating,
+                headers: {
+                'Authorization':'Bearer 7ebd0af5370954334f31080111bef59626b1709e046d2c77ec16bc5fff4e073a',
+                },
                 success: (res) => {
-                //$("#form").html(res);
                 refreshtable();
                 }
-    })
-      
-
-
+    })    
         return ;
     }
 

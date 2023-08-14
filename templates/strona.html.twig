@@ -1,0 +1,156 @@
+
+{% extends 'base.html.twig' %}
+ 
+{% block title %}Symfony 5 Project Manager{% endblock %}
+ 
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css">
+{% endblock %}
+ 
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% endblock %}
+ 
+{% block body %}
+
+<div id ="tabelka">
+
+</div>
+
+
+
+<div id ="form">
+{% include "form.html.twig" %}
+</div>
+
+    <button onclick="add()" >add</button>
+    <button id="btnUpdateDo" onclick="updateDo()"  disabled>update </button>
+    <button onclick="refreshtable()"> ref</button>
+
+<script>
+window.onload = refreshtable();
+nameI= $("#nameInput");
+emailI=$("#emailInput");
+genderI=$("#genderInput");
+statusI=$("#statusInput");
+function getdata(){
+
+name= nameI.val();
+email=emailI.val();
+gender=genderI.val();
+status=statusI.val();
+return {
+    
+    "name":name,
+    "gender":gender,
+    "email":email,
+    "status":status,
+}
+}
+function refreshtable(){
+$.ajax({
+                type: "POST",
+                url: "/zad3/render", 
+                //data: "obj=" + getdata(),
+                success: (res) => {
+                    //console.log(res);
+                    $("#tabelka").html(res);
+                }
+    })
+
+
+$("#table").html()
+}
+
+
+function add(){
+    console.log(getdata());
+    $.ajax({
+                type: "POST",
+                url: "https://gorest.co.in/public/v2/users/",
+                
+                headers: {
+                "Authorization":"Bearer 7ebd0af5370954334f31080111bef59626b1709e046d2c77ec16bc5fff4e073a",
+                },
+                data :{
+                    "name":"ania",
+                    "gender":"male",
+                    "email": "a@b.com",
+                    "status": "active", 
+
+                },
+                success: (res) => {
+                    console.log(res.body)
+                    refreshtable();
+                },
+               error: function(jqxhr) {
+            $("#register_area").text(jqxhr.responseText); // @text = response error, it is will be errors: 324, 500, 404 or anythings else
+          }
+    })
+      
+
+}
+
+function deleteItem(id){
+
+    $.ajax({
+                type: "DELETE",
+                url: "https://gorest.co.in/public/v2/users/"+id,
+                headers: {
+                'Authorization':'Bearer 7ebd0af5370954334f31080111bef59626b1709e046d2c77ec16bc5fff4e073a',
+                },
+                //data: id,
+                success: (res) => {
+                    refreshtable();
+                }
+    })
+      
+
+    console.log(getdata());
+    console.log(id);
+}
+
+let currentUpdating = -1;
+
+function updateSee(id){
+    currentUpdating = id;
+    $("#btnUpdateDo").prop("disabled",false);
+
+    $.ajax({
+                type: "POST",
+                url: "/zad3/form",
+                //data: "idup=" + currentUpdating,
+                success: (res) => {
+                $("#form").html(res);
+                }
+    })
+      
+
+
+
+
+}
+function updateDo(){
+    if(currentUpdating == -1 ){
+        
+    $.ajax({
+                type: "PUT",
+                url: "/zad3/update",
+                //data: "idup=" + currentUpdating+"objup"+getdata,
+                success: (res) => {
+                //$("#form").html(res);
+                refreshtable();
+                }
+    })
+      
+
+
+        return ;
+    }
+
+}
+
+</script>
+
+
+{% endblock %}

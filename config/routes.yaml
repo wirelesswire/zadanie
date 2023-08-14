@@ -5,3 +5,20 @@ controllers:
 kernel:
     resource: ../src/Kernel.php
     type: annotation
+
+
+# app_main:
+#     path: /
+#     controller: App\Controller\zad1::text
+# app_zad1:
+#     path: /zad1
+#     controller: App\Controller\zad1::text
+# app_zad2:
+#     path: /zad2
+#     controller: App\Controller\api\zad2::pesel
+# app_pliczek3:
+#     path: /zad3
+#     controller: App\Controller\api\zad3::strona
+# app_pliczek4:
+#     path: /zad4
+#     controller: App\Controller\api\zad3::strona

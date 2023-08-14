@@ -18,6 +18,14 @@ class zad3 extends AbstractController
         $users = $serializer->deserialize($json,"App\Entity\user[]","json");
         return $users;
     }
+    public function getSpecificUser($id){
+        $encoders = [ new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer(),new ArrayDenormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $json =     file_get_contents("https://gorest.co.in/public/v2/users/".$id);
+        $user = $serializer->deserialize($json,"App\Entity\user","json");
+        return $user;
+    }
 
 
     #[Route('/zad3', name: 'zad3')]
@@ -55,6 +63,20 @@ class zad3 extends AbstractController
 
 
         return $usersthatmatch;
+    }
+    #[Route('/zad3/form', name: 'form')]
+    public function form(): Response
+    {
+        $id= $_POST['id'] ??null;
+        if($id != null  && $id != -1 ){
+            return $this->render("form.html.twig",['user' =>$this->getSpecificUser($id) ,]);
+
+        }
+        else {
+            return $this->render("form.html.twig",[]);
+
+        }
+        return new Response("error");
     }
 
 

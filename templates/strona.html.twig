@@ -23,7 +23,7 @@
 
 
 <div id ="form">
-{% include "form.html.twig" %}
+{# {% include "form.html.twig" %} #}
 </div>
 
     <button onclick="add()" >add</button>
@@ -31,17 +31,20 @@
     <button onclick="refreshtable()"> ref</button>
 
 <script>
+
 function filtruj(){
     let val = $("#szukaj").val();
     console.log(val);
     refreshtable(val);
 }
 
-window.onload = refreshtable();
+{# window.onload = refreshtable(); #}
 nameI= $("#nameInput");
 emailI=$("#emailInput");
 genderI=$("#genderInput");
 statusI=$("#statusInput");
+
+
 function getdata(){
 
 name= nameI.val();
@@ -81,13 +84,7 @@ function add(){
                 headers: {
                 "Authorization":"Bearer 7ebd0af5370954334f31080111bef59626b1709e046d2c77ec16bc5fff4e073a",
                 },
-                data :{
-                    "name":"ania",
-                    "gender":"male",
-                    "email": "a@b.com",
-                    "status": "active", 
-
-                },
+                data :getdata(),
                 success: (res) => {
                     console.log(res.body)
                     refreshtable();
@@ -120,21 +117,34 @@ function deleteItem(id){
 
 let currentUpdating = -1;
 
-function updateSee(id){
+
+
+function updateForm(id){
     currentUpdating = id;
     
     $("#btnUpdateDo").prop("disabled",false);
     $.ajax({
                 type: "POST",
                 url: "/zad3/form",
+                data:"id="+id ,
                 success: (res) => {
                 $("#form").html(res);
+                nameI= $("#nameInput");
+                emailI=$("#emailInput");
+                genderI=$("#genderInput");
+                statusI=$("#statusInput");
                 }
-    })   
+    })
+       
 }
+updateForm(-1)
+refreshtable();
+
 function updateDo(){
     if(currentUpdating == -1 ){
-        
+                return ;
+    }
+    console.log(getdata());
     $.ajax({
                 type: "PUT",
                 url: "/zad3/update",
@@ -142,12 +152,12 @@ function updateDo(){
                 headers: {
                 'Authorization':'Bearer 7ebd0af5370954334f31080111bef59626b1709e046d2c77ec16bc5fff4e073a',
                 },
+                data:getdata(),
                 success: (res) => {
                 refreshtable();
                 }
     })    
-        return ;
-    }
+
 
 }
 

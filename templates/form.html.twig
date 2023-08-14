@@ -1,5 +1,5 @@
     {# <span> id </span><input type="id" placeholder ="wpisz id"  ></br> #}
-    {% if user is not defined %}
+    {% if user is not defined  %}
 
     <span> name</span><input id="nameInput" type="text" placeholder ="wpisz name"  ></br>
     <span> email </span><input id="emailInput" type="text" placeholder ="wpisz email"  ></br>
@@ -17,25 +17,25 @@
         </select>
     </span></br>
     {# <input type="text" placeholder ="wpisz status"  ></br> #}
-    {% endif %}
-        {% if user is  defined %}
+{% elseif user is  defined %}
 
-    <span> name</span><input id="nameInput" type="text" placeholder ="wpisz name" text ="{{ user != null ? user.getName() : "" }}" ></br>
-    <span> email </span><input id="emailInput" type="text" placeholder ="wpisz email"  ></br>
+
+{# asdnaosdoasidmn #}
+
+    <span> name</span><input id="nameInput" type="text" placeholder ="wpisz name" value ="{{  user.getName()  }}" ></br>
+    <span> email </span><input id="emailInput" type="text" placeholder ="wpisz email"   value ="{{  user.getEmail()  }}" ></br>
     <span>gender
         <select id="genderInput">
-            <option>male</option>
-            <option>female</option>
+            <option {{user.getGender() == "male" ? "selected":""}}>male</option>
+            <option {{user.getGender() == "female"?"selected":""}}>female</option>
         </select>
     </span></br>
-    {# <input type="text" placeholder ="wpisz gender"  ></br> #}
     <span>status
         <select id="statusInput">
-            <option>active</option>
-            <option>inactive</option>
+            <option{{user.getStatus() == "active" ? "selected":""}}>active</option>
+            <option{{user.getStatus() == "inactive" ? "selected":""}}>inactive</option>
         </select>
     </span></br>
-    {# <input type="text" placeholder ="wpisz status"  ></br> #}
     {% endif %}
 
 
